@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三緣色 FateColors｜台灣學生VTuber創作社團</title>
+<link rel="icon" type="image/png" href="logo.png">
+
+    <style>
+  
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #f7f3eb; /* 與網頁一致的溫暖淺米色底 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+            cursor: pointer;
+            padding: 20px;
+        }
+        #splash-img {
+            max-width: 90%;
+            max-height: 78vh;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(92, 75, 59, 0.2);
+            opacity: 0;
+            transform: scale(0.96);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        #splash-tip {
+            margin-top: 18px;
+            color: #9c8270;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 1.2s ease-out;
+        }
+
+        .btn-outline {
+            color: #ffffff !important;
+            border: 2px solid #ffffff !important;
+            background: rgba(255, 255, 255, 0.15) !important; /* 加上微微透明白底，在橫幅圖上更清楚 */
+        }
+        .btn-outline:hover {
+            background: #ffffff !important;
+            color: #6b5344 !important; /* 滑鼠移過去時變成白底咖啡色字 */
+        }
+
+        a, .nav-links a {
+            color: #6b5344 !important;      /* 跟內文一致的淺咖啡色 */
+            text-decoration: none !important; /* 拿掉預設底線 */
+            transition: color 0.2s !important;
+        }
+        a:hover, .nav-links a:hover {
+            color: #9c8270 !important;      /* 滑鼠移過去時變成柔和深米色 */
+        }
+
+        /* 保留有底色按鈕的文字顏色，避免與底色重疊 */
+        .btn-primary, .btn-pink {
+            color: #ffffff !important;
+        }
+        .member-btn {
+            color: #5c4333 !important;
+        }
+        .member-btn:hover {
+            color: #ffffff !important;
+        }
+
+          :root {
+            --bg-dark: #f7f3eb;        /* 溫暖淺米色主背景 */
+            --bg-card: #ffffff;        /* 純白卡片底色 */
+            --primary: #38bdf8;        /* 明亮晴空藍 */
+            --accent: #f472b6;         /* 甜美櫻花粉 */
+            --text-main: #6b5344;      /* 主文字：溫暖淺咖啡色（清楚又柔和） */
+            --text-muted: #9c8270;     /* 輔助文字：溫柔深米色（拿鐵奶茶色） */
+        .hero h1 {
+            font-size: 3.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            color: #F5F5DC; /* 調淺的柔和拿鐵咖啡色 */
+            text-shadow: 0 0 22px rgba(255, 255, 255, 0.98), 0 2px 8px rgba(255, 255, 255, 0.9);
+        }
+        .hero p {
+            max-width: 650px;
+            color: #F5F5DC; /* 更輕盈的淺可可米色 */
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.98);
+        }
+
+        }
+
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Helvetica Neue', Arial, '微軟正黑體', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* 頂部固定導覽列 */
+        nav {
+            width: 100vw !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 12px 24px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 12px !important;
+        }
+        .nav-links {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 14px !important;
+            margin-right: 10px !important;
+        }
+        .nav-links a {
+            margin-left: 0 !important;
+            white-space: nowrap !important;
+        }
+
+
+        /* 滿版主視覺區 (Hero Banner) */
+        .hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px 60px;
+            /* 這裡會讀取同資料夾的 banner.png，並加上半透明深色遮罩讓文字清楚 */
+            background: linear-gradient(to bottom, rgba(15,23,42,0.5), rgba(15,23,42,0.95)),
+                        url('banner.png') center/cover no-repeat,
+                        linear-gradient(135deg, #1e3a8a 0%, #311042 100%);
+        }
+        .hero-en { color: var(--primary); letter-spacing: 4px; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 10px; }
+        .hero h1 { font-size: 3.2rem; letter-spacing: 3px; margin-bottom: 15px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .hero p { max-width: 650px; color: #e2e8f0; font-size: 1.1rem; margin-bottom: 30px; }
+        .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 12px 28px; border-radius: 30px; text-decoration: none; font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s; display: inline-block;
+        }
+        .btn-primary { background: var(--primary); color: #0f172a; }
+        .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3); }
+
+        /* 區塊共用容器 */
+        .section { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-sub { color: var(--primary); font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; }
+        .section-title { font-size: 2.2rem; margin-top: 5px; }
+
+        /* 官方主頻道看板 */
+        .channel-box {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 40px;
+        }
+        .channel-info { display: flex; align-items: center; gap: 20px; }
+        .channel-avatar {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary); background: #334155;
+        }
+        .sub-badge {
+            display: inline-block; background: rgba(56, 189, 248, 0.15); color: var(--primary);
+            padding: 4px 14px; border-radius: 20px; font-weight: bold; margin-top: 6px;
+        }
+
+        /* 影片展示網格 */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            background: var(--bg-card); border-radius: 14px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* 成員立繪卡片網格 */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 30px;
+        }
+        .member-card {
+            background: radial-gradient(circle at center, #fdfbf7 0%, #efe9dd 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .member-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+        
+        /* 立繪圖片專屬框 */
+        .tachie-box {
+            width: 100%;
+            height: 360px; /* 立繪高度，可依圖片比例微調 */
+            background: radial-gradient(circle at center, #334155 0%, #1e293b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            position: relative;
+        }
+        .tachie-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 完整顯示全身或半身立繪不被裁切 */
+            object-position: bottom;
+            transition: transform 0.3s;
+        }
+        .member-card:hover .tachie-box img { transform: scale(1.05); }
+
+        .member-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .member-tag { color: var(--accent); font-size: 0.85rem; font-weight: bold; margin-bottom: 4px; }
+        .member-name { font-size: 1.5rem; margin-bottom: 8px; }
+        .member-subs { color: var(--primary); font-weight: bold; font-size: 0.95rem; margin-bottom: 12px; }
+        .member-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+                .member-btn {
+            text-align: center;
+            background: #efe9dd; /* 溫暖奶茶米色底，在白色卡片上很清楚 */
+            color: #5c4333;      /* 淺咖啡色文字，不會白字隱形 */
+            padding: 10px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s, color 0.2s;
+        }
+        .member-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .member-btn:hover { background: var(--primary); color: #0f172a; }
+
+        /* 關於我們區塊 */
+        .about-card {
+            background: var(--bg-card); padding: 40px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .about-card p { margin-bottom: 15px; color: #cbd5e1; }
+
+        footer {
+            text-align: center; padding: 40px 20px; border-top: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted); font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+<div id="splash-screen" onclick="this.style.display='none'">
+    <img id="splash-img" src="event-splash.png" alt="最新活動預告" style="opacity: 1; transform: scale(1);" onerror="document.getElementById('splash-screen').style.display='none'">
+    <div id="splash-tip" style="opacity: 1;">點擊畫面任意處進入官網 · CLICK TO ENTER</div>
+</div>
+
+
+
+<!-- 頂部導覽列 -->
+<nav>
+    <div class="nav-brand">三緣色 FateColors</div>
+    <div class="nav-links">
+        <a href="#about">關於我們</a>
+        <a href="#channel">官方頻道</a>
+        <a href="#members">核心成員</a>
+        <a href="#events">重大活動</a>
+    </div>
+</nav>
+
+<!-- 滿版主視覺 -->
+<header class="hero">
+    <div class="hero-en">FateColors VTuber Group</div>
+    <h1>三緣色 FateColors</h1>
+    <p>「在緣分中相遇的我們，將編織出只屬於我們的未來，共創只屬於我們的回憶」<br>集結在學學生創作者，以友情與實力編織的獨立 VTuber 社團。</p>
+    <div class="hero-btns">
+        <a href="#members" class="btn btn-primary">認識成員</a>
+        <a href="#channel" class="btn btn-outline">觀看精選影片</a>
+    </div>
+</header>
+
+<!-- 關於我們 -->
+<section id="about" class="section">
+    <div class="section-header">
+        <div class="section-sub">About · FateColors</div>
+        <h2 class="section-title">關於三緣色</h2>
+    </div>
+    <div class="about-card">
+        <p><strong>三緣色（FateColors）</strong>是由台灣年輕學生 VTuber 組成的獨立創作社團。在這裡，我們沒有大公司的資金與束縛，也沒有任何收益抽成——我們有的是一群擁有「獨立作業能力」、能互相支援的全能型戰友！</p>
+        <p>✦ <strong三個人‧三種顏色‧一條線：</strong>「三緣色」是一個學生 VTuber 社團。名字來自三個人在緣分中相遇，各自帶著自己的顏色，再把這三種顏色編成同一條線。。</p>
+        <p>✦ <strong>學生 VTuber 社團：</strong>成員們都還在唸書，直播與影片全都擠在放學、週末與寒暑假之間完成。從企劃、繪圖、建模到剪輯，幾乎都是自己來。</p>
+           </div>
+</section>
+
+<!-- 官方主頻道 & 影片區 -->
+<section id="channel" class="section">
+    <div class="section-header">
+        <div class="section-sub">Official Channel</div>
+        <h2 class="section-title">官方頻道與代表作</h2>
+    </div>
+
+    <div class="channel-box">
+        <div class="channel-info">
+            <!-- 放社團頭像 logo.png -->
+            <img src="logo.png" alt="三緣色頭像" class="channel-avatar" onerror="this.src='https://placeholder.com'">
+            <div>
+                <h3>三緣色 FateColors 官方頻道</h3>
+                <div class="sub-badge" id="subs-group">訂閱人數讀取中...</div>
+            </div>
+        </div>
+        <a href="https://youtube.com/channel/UCLgeqis98XPhkKh8t06qjIw?si=55-xw_174xFi_jzN" target="_blank" class="btn btn-primary">前往訂閱頻道</a>
+    </div>
+
+   <!-- 精選影片牆（可放多部影片） -->
+<div class="videos-grid">
+    <!-- 第一部影片（已幫你把你的 Shorts 轉成正確的 embed 格式） -->
+    <div class="video-card">
+        <div class="video-wrapper">
+            <iframe src="https://youtube.com" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- 第二部影片（預設自動抓三緣色官方頻道最新上傳影片，也可自己換成其他影片ID） -->
+    <div class="video-card">
+        <div class="video-wrapper">
+            <iframe src="https://youtube.com" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+
+   <!-- 核心成員 -->
+<section id="members" class="section">
+    <div class="section-header">
+        <div class="section-sub">0期生‧微光交界</div>
+        <h2 class="section-title">社團成員</h2>
+    </div>
+
+    <div class="members-grid">
+        <!-- 成員 1：星櫻雪 -->
+        <div class="member-card">
+            <div class="tachie-box">
+                <img src="yuki.png" alt="星櫻雪立繪" onerror="this.src='https://placeholder.com'">
+            </div>
+            <div class="member-body">
+                <div class="member-tag">企劃 · 繪圖 · 頻道營運</div>
+                <h3 class="member-name">星櫻雪</h3>
+                <div class="member-subs" id="subs-yuki">訂閱數讀取中...</div>
+                <p class="member-desc">負責社團大型企劃發想、視覺繪圖與主頻道營運，用溫柔充滿青春活力的歌聲與創作陪伴大家。</p>
+                <a href="https://www.youtube.com/@silmueiris星櫻雪" target="_blank" class="member-btn">前往 YouTube</a>
+            </div>
+        </div>
+
+        <!-- 成員 2：卡關王 -->
+        <div class="member-card">
+            <div class="tachie-box">
+                <img src="kaguan.png" alt="卡關王立繪" onerror="this.src='https://placeholder.com'">
+            </div>
+            <div class="member-body">
+                <div class="member-tag">Live2D 建模師</div>
+                <h3 class="member-name">卡關王</h3>
+                <div class="member-subs" id="subs-kaguan">訂閱數讀取中...</div>
+                <p class="member-desc">負責賦予角色靈魂的 Live2D 動態建模師，讓大家的奇思妙想化為現實。</p>
+                <a href="https://www.youtube.com/@game_stucking" target="_blank" class="member-btn">前往 YouTube</a>
+            </div>
+        </div>
+
+        <!-- 成員 3：毛球 -->
+        <div class="member-card">
+            <div class="tachie-box">
+                <img src="maoqiu.png" alt="毛球立繪" onerror="this.src='https://placeholder.com'">
+            </div>
+            <div class="member-body">
+                <div class="member-tag">影片剪輯 · 後製特效</div>
+                <h3 class="member-name">毛球Remi</h3>
+                <div class="member-subs" id="subs-maoqiu">訂閱數讀取中...</div>
+                <p class="member-desc">負責精華剪輯與影片特效後製，將每一次的歡笑與感動濃縮成精彩作品。</p>
+                <a href="https://www.twitch.tv/20140829remi" target="_blank" class="member-btn">前往 Twitch</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 大標 1：即將登場 -->
+<section id="upcoming" class="section">
+    <div class="section-header">
+        <div class="section-sub" style="color: var(--accent);">Upcoming Events</div>
+        <h2 class="section-title">即將登場</h2>
+    </div>
+
+    <div class="upcoming-grid">
+        <div class="upcoming-card">
+            <div class="upcoming-date">2026.12.24</div>
+            <h3 class="upcoming-title">聖誕節活動企劃</h3>
+            <p class="upcoming-desc">今年聖誕節，讓三緣色陪你一起度過吧！</p>
+ <a href="https://x.com/Fate_Colors/status/2123668708161896579?a=SemUX20drZqGcTK_lNk&s=20" target="_blank" class="event-link-btn btn-pink">投稿問題 ➔</a>
+</div>
+        <!-- 未來如果還有第二個即將登場的活動，直接複製上面一組 <div class="upcoming-card">...</div> 貼在這裡就會自動並排！ -->
+    </div>
+</section>
+
+<!-- 大標 2：重大活動日程（歷史里程碑） -->
+<section id="events" class="section">
+    <div class="section-header">
+        <div class="section-sub">Milestones & History</div>
+        <h2 class="section-title">重大活動日程</h2>
+    </div>
+
+    <div class="timeline">
+        <!-- 社團創立紀念日 -->
+        <div class="timeline-item">
+            <div class="timeline-date">
+                <span>2026.10.07</span>
+            </div>
+            <h3 class="timeline-title">「三緣色 FateColors」社團正式創立</h3>
+            <p class="timeline-desc">三個人、三種顏色、一條線，開啟把奇思妙想變成現實的旅程！</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>三緣色 FateColors © 2026</p>
+</footer>
+
+<script>
+    const CHANNEL_IDS = {
+        'subs-group': 'UCLgeqis98XPhkKh8t06qjIw' // 三緣色官方頻道 ID
+    };
+
+    async function loadSubscriberCount(elementId, channelId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        // 目標統計接口
+        const targetApi = `https://socialcounts.org{channelId}`;
+        // 透過公開 CORS 代理通道，解決本機 file:/// 被瀏覽器阻擋的問題
+        const proxyUrl = `https://allorigins.win{encodeURIComponent(targetApi)}`;
+
+        try {
+            const response = await fetch(proxyUrl);
+            const wrapper = await response.json();
+            const data = JSON.parse(wrapper.contents);
+
+            if (data && data.est_sub !== undefined) {
+                el.innerText = `${Number(data.est_sub).toLocaleString()} 位訂閱者`;
+            } else {
+                el.innerText = '歡迎訂閱官方頻道！';
+            }
+        } catch (error) {
+            console.error('抓取失敗:', error);
+            el.innerText = '歡迎訂閱官方頻道！';
+        }
+    }
+
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadSubscriberCount('subs-group', CHANNEL_IDS['subs-group']);
+    });
+<script>
+    let splashClosed = false;
+
+    function closeSplash() {
+        if (splashClosed) return;
+        splashClosed = true;
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 1000);
+        }
+    }
+
+    // 2. 官方頻道訂閱數自動抓取
+    async function loadSubscriberCount(elementId, channelId) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        const targetApi = `https://socialcounts.org{channelId}`;
+        const proxyUrl = `https://allorigins.win{encodeURIComponent(targetApi)}`;
+
+        try {
+            const response = await fetch(proxyUrl);
+            const wrapper = await response.json();
+            const data = JSON.parse(wrapper.contents);
+
+            if (data && data.est_sub !== undefined) {
+                el.innerText = `${Number(data.est_sub).toLocaleString()} 位訂閱者`;
+            } else {
+                el.innerText = '歡迎訂閱官方頻道！';
+            }
+        } catch (error) {
+            el.innerText = '歡迎訂閱官方頻道！';
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const img = document.getElementById('splash-img');
+        const tip = document.getElementById('splash-tip');
+        
+        // 進站後 0.1 秒開始慢慢淡入海報與提示字
+        setTimeout(() => {
+            if (img) {
+                img.style.opacity = '1';
+                img.style.transform = 'scale(1)';
+            }
+            if (tip) tip.style.opacity = '1';
+        }, 100);
+
+        // 停留展示約 3.5 秒後，自動慢慢淡出進入主網頁
+        setTimeout(() => {
+            closeSplash();
+        }, 3800);
+
+        // 抓取三緣色官方頻道訂閱數
+        loadSubscriberCount('subs-group', 'UCLgeqis98XPhkKh8t06qjIw');
+    });
+</script>
+
+</body>
+</html>
+
+
